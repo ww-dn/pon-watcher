@@ -43,4 +43,8 @@ function get_laser_level($oltip, $snmppas, $uidonu) {
 function reboot_onu($oltip, $snmppas, $uidonu) {
   $rebootonu = snmpset($oltip, $snmppas, '1.3.6.1.4.1.3320.101.10.1.1.29.'.$uidonu, 'i', '0');
 }
+
+function reboot_olt($oltip, $snmppas) {
+  $rebootonu = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.184.7.0', 'i', '1');
+}
 ?>

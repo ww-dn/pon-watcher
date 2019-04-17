@@ -26,7 +26,7 @@ if ($num_rows > "0") {
         echo "<td>".long2ip($row['ip'])."</td>";
         echo "<td>".$row['name']."</td>";
         echo "<td>".$row['location']."</td>";
-        echo "<td><a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
+        echo "<td><a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openreboot('".$row['id']."')\" uk-icon='icon: refresh' uk-tooltip='Reboot'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
         echo "</tr>";
     }
 ?>
@@ -76,6 +76,10 @@ if ($num_rows > "0") {
 
 </div>
 
+<div id="oltReboot" uk-modal>
+
+</div>
+
 <script>
 function openedit(oltid) {
     var boxid = boxid,
@@ -88,10 +92,29 @@ function openedit(oltid) {
     ({
       type: "GET",
       url: "/connectors/olt/olt_edit.php",
-      data: {"id":oltid},
+      data: {"edit":'1',"id":oltid},
       success: function(html) {
         $('#oltEdit').empty();
         $("#oltEdit").html(html);
+      }
+    });
+  }
+
+  function openreboot(oltid) {
+    var boxid = boxid,
+        modal = UIkit.modal('#oltReboot', {
+          escClose: false,
+          bgClose: false
+        });
+    modal.show();
+    $.ajax
+    ({
+      type: "GET",
+      url: "/connectors/olt/olt_edit.php",
+      data: {"reboot":'1', "id":oltid},
+      success: function(html) {
+        $('#oltReboot').empty();
+        $("#oltReboot").html(html);
       }
     });
   }
@@ -121,6 +144,13 @@ if (isset($_GET['del'])) {
   $query_add = new dbmysql();
   $query_add->result("DELETE FROM `onu` WHERE `onu`.`id_olt` = ".$_GET['id']."");
   $query_add->result("DELETE FROM `olts` WHERE `olts`.`id` = ".$_GET['id']."");
+  header("Location: /?p=11");
+}
+
+if (isset($_POST['reboot'])) {
+  @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
+  @include(dirname(dirname(dirname(__FILE__))) . '/core/function.php');
+  reboot_olt($_POST['oltip'], $_POST['snmppassoltreboot']);
   header("Location: /?p=11");
 }
 ?>

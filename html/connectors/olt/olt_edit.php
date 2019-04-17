@@ -1,6 +1,7 @@
 <?php
 @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
 @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
+if (isset($_GET['edit'])) {
   $query_olt_edit = new dbmysql();
   $select_olt_edit = $query_olt_edit->result("SELECT * FROM `olts` WHERE `id`=".$_GET['id']);
   $num_rows_olt_edit = $query_olt_edit->fetch_row($select_olt_edit);
@@ -40,5 +41,40 @@
         <button type="submit" form="editolt" class="uk-button uk-button-default">Изменить</button>
         <button type="button" class="uk-modal-close-default" uk-close>Закрыть</button>
     </div>
-  </div>  
+  </div> 
+<?php
+}
+
+if (isset($_GET['reboot'])) {
+  $query_olt_reboot = new dbmysql();
+  $select_olt_reboot = $query_olt_reboot->result("SELECT * FROM `olts` WHERE `id`=".$_GET['id']);
+  $num_rows_olt_reboot = $query_olt_reboot->fetch_row($select_olt_reboot);
+  
+  $row_olt_reboot = Array();
+  $row_olt_reboot = $query_olt_reboot->fetch_assoc($select_olt_reboot);
+?>
+<div class="uk-modal-dialog">
+    <div class="uk-modal-header">
+      <h5 class="uk-modal-title">Перезагрузить OLT</h5>  
+    </div>
+    <div class="uk-modal-body">
+        <form id="rebootolt" method="POST" action="/connectors/olt/olts_conf.php">
+        <input type="hidden" name="reboot">
+        <input type="hidden" name="oltip" value="<?=long2ip($row_olt_reboot['ip'])?>">
+        <div class="uk-margin">
+          <span class="uk-text-middle uk-text-danger" for="snmp">Вписывая RW community вы согашаетесь с перезагрузкой OLT-a</span>
+          <div class="uk-form-controls">
+            <input type="text" class="uk-input uk-form-width-medium" placeholder="Впишите RW community" id="snmp" name="snmppassoltreboot" value="">
+          </div>
+        </div>
+        </form>
+        <div class="uk-margin"></div>
+    </div>
+    <div class="uk-modal-footer">
+        <button type="submit" form="rebootolt" class="uk-button uk-button-default">reboot</button>
+        <button type="button" class="uk-modal-close-default" uk-close>Закрыть</button>
+    </div>
+  </div> 
+<?php
+}
 ?>
