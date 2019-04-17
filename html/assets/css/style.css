@@ -1,0 +1,13 @@
+body {
+  height: 100%;
+  background: #f8f8f8;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+}
+
+.uk-navbar-container {
+  background: #e6e6e6 !important;
+}
