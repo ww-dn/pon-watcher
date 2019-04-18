@@ -12,6 +12,8 @@
 @include(dirname(dirname(__FILE__)) . '/core/function.php');
 if (isset($_GET['f']) AND $_GET['f'] == 'checknew') {
 $query = new dbmysql();
+$q_find_onu = new dbmysql();
+$q_insert = new dbmysql();
 $select_olt = $query->result("SELECT * FROM olts");
 $num_row_onu = $query->fetch_row();
 if ($num_row_onu >= '1') {
@@ -24,10 +26,11 @@ if (count($ids_onu) > 0) {
     $id_onu = end($id_onu); // Узнаем id интерфейса на OLT-e
     $iface = get_iface(long2ip($row_olt['ip']), $row_olt['snmppas'], $id_onu); // Узнаем интерфейс онушки на ОЛТе
     $mac = get_mac_onu(long2ip($row_olt['ip']), $row_olt['snmppas'], $id_onu); // Узнаем MAC
-    $select_uidonu = $query->result("SELECT `id`, `uidonu` FROM onu WHERE 'uidonu' = '".$id_onu."'");
-    $num_row = $query->fetch_row($select_uidonu);
+    $select_uidonu = $q_find_onu->result("SELECT `id`, `uidonu` FROM `onu` WHERE `uidonu` = '".$id_onu."'");
+    $num_row = $q_find_onu->fetch_row($select_uidonu);
+    print_r($num_row);
     if ($num_row == '0') {
-      $insert_new_onu = $query->result("INSERT INTO onu (id_olt, uidonu, iface, mac) VALUES ('".$row_olt['id']."', '".$id_onu."', '".$iface."', '".$mac."')");
+      $insert_new_onu = $q_insert->result("INSERT INTO onu (id_olt, uidonu, iface, mac) VALUES ('".$row_olt['id']."', '".$id_onu."', '".$iface."', '".$mac."')");
     }
   }
   echo "OK";
