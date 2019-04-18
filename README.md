@@ -2,11 +2,23 @@
 **v0.2.2-beta**
 
 **Требования**
-* php7, mysql, nginx(apache)
+* php7(на меньших версиях не проверялось), mysql, nginx(apache)
 
 * php-snmp
 
 * php-mysqli
+
+**Начало работы**
+
+* Отредактировать файл config.core.php
+
+MAPS_YA_API_KEY - Вписать свой api ключ yandex карт
+
+MAPS_DEF_LAT, MAPS_DEF_LON - вписать долготу, широту по умолчания
+
+* Отредактипровать файл /core/mysql.conf.php
+
+Вписать параметры подключения к БД
 
 **Что уже умеет:**
 
