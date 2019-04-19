@@ -47,4 +47,5 @@ function reboot_onu($oltip, $snmppas, $uidonu) {
 function reboot_olt($oltip, $snmppas) {
   $rebootonu = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.184.7.0', 'i', '1');
 }
+
 ?>
