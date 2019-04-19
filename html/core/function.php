@@ -16,13 +16,16 @@ function get_id_onu($oltip, $snmppas) {
 }
 function get_mac_onu($oltip, $snmppas, $uidonu) {
   $mac_onu = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.10.1.1.3.'.$uidonu);
-  $mac_onu = trim(end(explode(':', $mac_onu)));
+  $mac_onu = explode(':', $mac_onu);
+  $mac_onu = end($mac_onu);
+  $mac_onu = trim($mac_onu);
   $mac_onu = str_replace (" ", ":", $mac_onu);
   return $mac_onu;
 }
 function get_iface($oltip, $snmppas, $uidonu) {
   $iface_onu = snmpget($oltip, $snmppas, '.1.3.6.1.2.1.2.2.1.2.'.$uidonu);
-  $iface_onu = end(explode(' ', $iface_onu));
+  $iface_onu = explode(' ', $iface_onu);
+  $iface_onu = end($iface_onu);
   $iface_onu = str_replace("\"", "", $iface_onu);
   return $iface_onu;
 }

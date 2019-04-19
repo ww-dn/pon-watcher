@@ -19,13 +19,14 @@ $num_row_onu = $query->fetch_row();
 if ($num_row_onu >= '1') {
 $row_olt = Array();
 while (is_array($row_olt = $query->fetch_assoc($select_olt))) {
-$ids_onu = get_id_onu(long2ip($row_olt['ip']), $row_olt['snmppas']);
+$olt_ip = long2ip($row_olt['ip']);
+$ids_onu = get_id_onu($olt_ip, $row_olt['snmppas']);  
 if (count($ids_onu) > 0) {
   foreach($ids_onu as $key => $type) {
     $id_onu = explode('10.1.1.26.', $key);
     $id_onu = end($id_onu); // Узнаем id интерфейса на OLT-e
-    $iface = get_iface(long2ip($row_olt['ip']), $row_olt['snmppas'], $id_onu); // Узнаем интерфейс онушки на ОЛТе
-    $mac = get_mac_onu(long2ip($row_olt['ip']), $row_olt['snmppas'], $id_onu); // Узнаем MAC
+    $iface = get_iface($olt_ip, $row_olt['snmppas'], $id_onu); // Узнаем интерфейс онушки на ОЛТе
+    $mac = get_mac_onu($olt_ip, $row_olt['snmppas'], $id_onu); // Узнаем MAC
     $select_uidonu = $q_find_onu->result("SELECT `id`, `uidonu` FROM `onu` WHERE `uidonu` = '".$id_onu."'");
     $num_row = $q_find_onu->fetch_row($select_uidonu);
     print_r($num_row);
@@ -48,10 +49,11 @@ if (isset($_GET['f']) AND $_GET['f'] == 'ping') {
   while (is_array($row_olt = $query->fetch_assoc($select_olt))) {
     $select_onu = $query->result("SELECT * FROM `onu` WHERE `id_olt` = ".$row_olt['id']);
     $num_row_onu = $query->fetch_row();
+    $olt_ip = long2ip($row_olt['ip']);
     if ($num_row_onu >= '1') {
       $row_onu = Array();
       while (is_array($row_onu = $query->fetch_assoc($select_onu))) {
-        $laser_level = get_laser_level(long2ip($row_olt['ip']), $row_olt['snmppas'], $row_onu['uidonu']);
+        $laser_level = get_laser_level($olt_ip, $row_olt['snmppas'], $row_onu['uidonu']);
         $oltid = $row_olt['id'];
         $uidonu = $row_onu['uidonu'];
         $upd_laser_lvl = $query_update->result("UPDATE onu SET last_laser_lvl = '$laser_level' WHERE id_olt = $oltid AND uidonu = $uidonu");
