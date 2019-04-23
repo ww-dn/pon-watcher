@@ -9,7 +9,33 @@ function get_status_onu($last_laser_onu) {
     }
     return $status_onu;
 }
-## ------ SNMP --------------------------
+
+function backup_fs() {
+  $scr_arch = "cd " . $_SERVER['DOCUMENT_ROOT'] . " && tar -cvzf " . $_SERVER['DOCUMENT_ROOT'] . "/backup/files_" . date("Ymd-Hi") . ".tar.gz --exclude=./backup .";
+  exec($scr_arch);
+  $ls = ls_backup_dir();
+  return $ls;
+}
+
+function backup_db() {
+  //$scr_arch = "cd " . $_SERVER['DOCUMENT_ROOT'] . " && tar -cvzf " . $_SERVER['DOCUMENT_ROOT'] . "/backup/" . date("Ymd_Hi") . ".tar.gz --exclude=./backup .";
+  $scr_arch = "mysqldump -u " . MY_USERNAME . " -p" . MY_PASSWORD . " " . MY_DB . " | gzip > " . $_SERVER['DOCUMENT_ROOT'] . "/backup/base_" . date("Ymd-Hi") . ".sql.gz";
+  exec($scr_arch);
+  $ls = ls_backup_dir();
+  return $ls;
+}
+
+function ls_backup_dir() {
+  $directory = $_SERVER['DOCUMENT_ROOT'] . "/backup/" ;
+  $scanned_directory = array_diff(scandir($directory), array('..', '.', '.htaccess'));
+  foreach ($scanned_directory as $val) {
+    $ls .= $val."<br>";
+  }
+  return $ls;
+}
+
+/*
+## ------ SNMP BDCOM --------------------------
 function get_id_onu($oltip, $snmppas) {
   $id_onu = snmprealwalk($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.10.1.1.26');
   return $id_onu;
@@ -50,5 +76,5 @@ function reboot_onu($oltip, $snmppas, $uidonu) {
 function reboot_olt($oltip, $snmppas) {
   $rebootonu = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.184.7.0', 'i', '1');
 }
-
+*/
 ?>

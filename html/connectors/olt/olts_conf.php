@@ -149,8 +149,9 @@ if (isset($_GET['del'])) {
 
 if (isset($_POST['reboot'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
-  @include(dirname(dirname(dirname(__FILE__))) . '/core/function.php');
-  reboot_olt($_POST['oltip'], $_POST['snmppassoltreboot']);
+  include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $_POST['vend'] . ".function.php");
+  $reboot_olt =  $_POST['vend']."_reboot_olt";
+  $reboot_olt($_POST['oltip'], $_POST['snmppassoltreboot']);
   header("Location: /?p=11");
 }
 ?>

@@ -6,11 +6,15 @@ if (isset($_GET['p']) AND $_GET['p'] == '22') {
     $select_olt = $query->result("SELECT * FROM `olts` WHERE `id` = '".$_GET['oltid']."'");
     $row_olt = Array();
     $row_olt = $query->fetch_assoc($select_olt);
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $row_olt['vendor'] . ".function.php");
+    $get_onu_port_cooper = $row_olt['vendor']."_get_onu_port_cooper";
+    $get_laser_level = $row_olt['vendor']."_get_laser_level";
+
     $select_onu = $query_onu->result("SELECT onu.id as oid, onu.id_olt, onu.uidonu, onu.iface, onu.mac, onu.boxid, onu.roz, onu.last_laser_lvl, onu.lat as olat, onu.lon as olon, boxs.id as bid, boxs.num_box, boxs.sum_roz, boxs.lat as blat, boxs.lon as blon FROM `onu`,`boxs` WHERE `onu`.`id_olt` = ".$_GET['oltid']." AND `onu`.`uidonu` = ".$_GET['onuid']." AND `boxs`.`id` = `onu`.`boxid`");
     $row_onu = Array();
     $row_onu = $query_onu->fetch_assoc($select_onu);
-    $port_cooper_onu = get_onu_port_cooper(long2ip($row_olt['ip']), $row_olt['snmppas'], $_GET['onuid']);
-    $laser_level = get_laser_level(long2ip($row_olt['ip']), $row_olt['snmppas'], $_GET['onuid']);
+    $port_cooper_onu = $get_onu_port_cooper(long2ip($row_olt['ip']), $row_olt['snmppas'], $_GET['onuid']);
+    $laser_level = $get_laser_level(long2ip($row_olt['ip']), $row_olt['snmppas'], $_GET['onuid']);
     
     if ($row_onu['olat'] == '') {
         $onu_lat = MAPS_DEF_LAT;
@@ -41,7 +45,7 @@ if (isset($_GET['p']) AND $_GET['p'] == '22') {
     echo "<b>Муфта:</b> " . $row_onu['num_box'] . "<br>";
     echo "<b>Розетка:</b> " . $row_onu['roz'] . "<br>";
     echo "</div> <div class='uk-card-footer'>";
-    echo "<a href='/connectors/onu/onu.php?reboot&uid=" . $_GET['onuid'] . "&oltip=" . long2ip($row_olt['ip']) . "&snmppas=" . $row_olt['snmppas'] . "&oltid=" . $row_olt['id'] . "' uk-icon='icon: refresh; ratio: 2' uk-tooltip='Перезагрузить ONU'></a>";
+    echo "<a href='/connectors/onu/onu.php?reboot&uid=" . $_GET['onuid'] . "&oltip=" . long2ip($row_olt['ip']) . "&snmppas=" . $row_olt['snmppas'] . "&oltid=" . $row_olt['id'] . "&vend=" . $row_olt['vendor'] . "' uk-icon='icon: refresh; ratio: 2' uk-tooltip='Перезагрузить ONU'></a>";
     echo "</div></div>";
 ################
     echo "<div class='uk-card'>";
@@ -127,8 +131,9 @@ include (dirname(dirname(dirname(__FILE__))) . '/core/maps/' . MAPS . '/map_onu.
 
 else if (isset($_GET['reboot'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
-  @include(dirname(dirname(dirname(__FILE__))) . '/core/function.php');
-  reboot_onu($_GET['oltip'], $_GET['snmppas'], $_GET['uid']);
+  include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $_GET['vend'] . ".function.php");
+  $reboot_onu = $_GET['vend']."_reboot_onu";
+  $reboot_onu($_GET['oltip'], $_GET['snmppas'], $_GET['uid']);
   header("Location: /?p=22&oltid=".$_GET['oltid']."&onuid=".$_GET['uid']);
 }
 

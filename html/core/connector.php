@@ -18,5 +18,8 @@ else if ($_GET['p'] == '31') {
 else if ($_GET['p'] == '32') {
     include(CONNECTORS_PATH . '/boxs/boxs_conf.php');
 }
+else if ($_GET['p'] == '41') {
+    include(CONNECTORS_PATH . '/backup/backup.php');
+}
 
 ?>

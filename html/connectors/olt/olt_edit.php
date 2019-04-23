@@ -61,6 +61,7 @@ if (isset($_GET['reboot'])) {
         <form id="rebootolt" method="POST" action="/connectors/olt/olts_conf.php">
         <input type="hidden" name="reboot">
         <input type="hidden" name="oltip" value="<?=long2ip($row_olt_reboot['ip'])?>">
+        <input type="hidden" name="vend" value="<?=$row_olt_reboot['vendor']?>">
         <div class="uk-margin">
           <span class="uk-text-middle uk-text-danger" for="snmp">Вписывая RW community вы согашаетесь с перезагрузкой OLT-a</span>
           <div class="uk-form-controls">

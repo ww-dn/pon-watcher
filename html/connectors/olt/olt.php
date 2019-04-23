@@ -9,6 +9,7 @@ if (isset($_GET['p']) AND $_GET['p'] == '21') {
     if ($num_row_onu > "0") {
     $select_olt = $query_olt->result("SELECT * FROM `olts` WHERE `id` = ".$_GET['oltid']);
     $row_olt = $query_olt->fetch_assoc($select_olt);
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $row_olt['vendor'] . ".function.php");
     echo "<div class='d-flex flex-column'>";
     echo "<h3>" . $row_olt['name'] . " - " . long2ip($row_olt['ip']) . "</h3>";
     ?>
