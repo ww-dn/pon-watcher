@@ -26,7 +26,7 @@ if ($num_rows > "0") {
         echo "<td>".long2ip($row['ip'])."</td>";
         echo "<td>".$row['name']."</td>";
         echo "<td>".$row['location']."</td>";
-        echo "<td><a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openreboot('".$row['id']."')\" uk-icon='icon: refresh' uk-tooltip='Reboot'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
+        echo "<td><a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"saveconf('".$row['id']."')\" uk-icon='icon: cloud-upload' uk-tooltip='Сохранить'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openreboot('".$row['id']."')\" uk-icon='icon: refresh' uk-tooltip='Reboot'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
         echo "</tr>";
     }
 ?>
@@ -70,6 +70,14 @@ if ($num_rows > "0") {
     </div>
   </div>
 </div>
+
+
+  <div id="loader" class="uk-flex-top" uk-modal="bg-close: false">
+      <div class="uk-modal-dialog uk-margin-auto-vertical uk-padding-small uk-text-center">
+        <div uk-spinner="ratio: 2"></div>
+      </div>
+  </div>  
+
 
 <!-- Modal edit-->
 <div id="oltEdit" uk-modal>
@@ -118,11 +126,33 @@ function openedit(oltid) {
       }
     });
   }
+
+  function saveconf(oltid) {
+    $.ajax
+    ({
+      type: "GET",
+      url: "/connectors/olt/olts_conf.php",
+      data: {"save":'1', "id":oltid},
+      beforeSend: function() {
+        UIkit.modal("#loader").show();
+      },
+      
+      success: function(html) {
+        toastr["success"]("Конфигурация сохранена!");
+      },
+      error: function(html) {
+        toastr["error"]("Произошла ошибка при сохранении!");
+      },
+      complete: function() {
+        UIkit.modal("#loader").hide();
+      }
+    });
+  }
 </script>
 <?php
 }
 
-if (isset($_POST['add'])) {
+else if (isset($_POST['add'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
   @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
   $query_add = new dbmysql();
@@ -130,7 +160,7 @@ if (isset($_POST['add'])) {
   header("Location: /?p=11");
 }
 
-if (isset($_POST['edit'])) {
+else if (isset($_POST['edit'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
   @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
   $query_add = new dbmysql();
@@ -138,7 +168,7 @@ if (isset($_POST['edit'])) {
   header("Location: /?p=11");
 }
 
-if (isset($_GET['del'])) {
+else if (isset($_GET['del'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
   @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
   $query_add = new dbmysql();
@@ -147,11 +177,25 @@ if (isset($_GET['del'])) {
   header("Location: /?p=11");
 }
 
-if (isset($_POST['reboot'])) {
+else if (isset($_POST['reboot'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
   include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $_POST['vend'] . ".function.php");
   $reboot_olt =  $_POST['vend']."_reboot_olt";
   $reboot_olt($_POST['oltip'], $_POST['snmppassoltreboot']);
   header("Location: /?p=11");
+}
+
+elseif (isset($_GET['save']) AND $_GET['save'] == '1') {
+  @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
+  @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
+  $query_olt_save = new dbmysql();
+  $select_olt_save = $query_olt_save->result("SELECT * FROM `olts` WHERE `id`=".$_GET['id']);
+  $num_rows_olt_save = $query_olt_save->fetch_row($select_olt_save);
+  $row_olt_save = Array();
+  $row_olt_save = $query_olt_save->fetch_assoc($select_olt_save);
+  include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $row_olt_save['vendor'] . ".function.php");
+  $save_config = $row_olt_save['vendor']."_save_config";
+  $ret = $save_config(long2ip($row_olt_save['ip']), $row_olt_save['snmppas']);
+  print_r($ret);
 }
 ?>

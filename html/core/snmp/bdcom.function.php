@@ -42,4 +42,9 @@ function bdcom_reboot_olt($oltip, $snmppas) {
   $rebootonu = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.184.7.0', 'i', '1');
 }
 
+function bdcom_save_config($oltip, $snmppas) {
+  snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.20.15.1.1.0', 'i', '1');
+  snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.20.15.1.1.0', 'i', '2');
+}
+
 ?>
