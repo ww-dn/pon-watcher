@@ -198,4 +198,27 @@ elseif (isset($_GET['save']) AND $_GET['save'] == '1') {
   $ret = $save_config(long2ip($row_olt_save['ip']), $row_olt_save['snmppas']);
   print_r($ret);
 }
+
+elseif (isset($_POST['unbindonu']) AND $_POST['unbindonu'] == '1') {
+  @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
+  @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
+  @include(dirname(dirname(dirname(__FILE__))) . '/core/function.php');
+  $q_olt = new dbmysql();
+  $q_onu = new dbmysql();
+  $q_onu_del = new dbmysql();
+  $select_olt = $q_olt->result("SELECT * FROM `olts` WHERE `id`=".$_POST['oltid']);
+  $num_rows_olt = $q_olt->fetch_row($select_olt);
+  $row_olt = Array();
+  $row_olt = $q_olt->fetch_assoc($select_olt);
+  include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $row_olt['vendor'] . ".function.php");
+  $select_onu = $q_onu->result("SELECT * FROM `onu` WHERE `uidonu` = ".$_POST['uidonu']." AND `id_olt` = ".$_POST['oltid']."");
+  $row_onu = array();
+  $row_onu = $q_onu->fetch_assoc($select_onu);
+  $get_num_sfp = $row_olt['vendor']."_get_num_sfp";
+  $unbind_onu = $row_olt['vendor']."_unbind_onu";
+  $mac10 = mac210($row_onu['mac']);
+  $num_sfp = $get_num_sfp(long2ip($row_olt['ip']), $row_olt['snmppas'], $row_onu['uidonu']);
+  $unbind_onu(long2ip($row_olt['ip']), $row_olt['snmppas'], $num_sfp, $mac10);
+  $q_onu_del->result("DELETE FROM `onu` WHERE `onu`.`id` = ".$row_onu['id']."");
+}
 ?>

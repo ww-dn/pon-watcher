@@ -34,6 +34,15 @@ function ls_backup_dir() {
   return $ls;
 }
 
+function mac210($mac) {
+  $mac_ar = explode(":", $mac);
+  $mac10 = "";
+  foreach ($mac_ar as $val) {
+    $mac10 .= ".".hexdec($val);
+  }
+  return $mac10;
+}
+
 /*
 ## ------ SNMP BDCOM --------------------------
 function get_id_onu($oltip, $snmppas) {

@@ -47,4 +47,27 @@ function bdcom_save_config($oltip, $snmppas) {
   snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.20.15.1.1.0', 'i', '2');
 }
 
+function bdcom_get_num_sfp($oltip, $snmppas, $uidonu) {
+  $iface_onu = bdcom_get_iface($oltip, $snmppas, $uidonu);
+  $iface_opt = explode(":", $iface_onu);
+  $iface_opt = reset($iface_opt);
+  $get_range_port = snmprealwalk($oltip, $snmppas, '.1.3.6.1.2.1.2.2.1.2');
+  $num_opt_port = "";
+  foreach ($get_range_port as $key => $val) {
+    $nam_opt_port_t = explode(' ', $val);
+    $nam_opt_port = end($nam_opt_port_t);
+    $nam_opt_port = str_replace("\"", "", $nam_opt_port);
+    if ( $nam_opt_port == $iface_opt ){
+      $num_opt_port = explode('.', $key);
+      $num_opt_port = end($num_opt_port);
+      break;
+    }
+  }
+  return $num_opt_port;
+}
+
+function bdcom_unbind_onu($oltip, $snmppas, $num_opt_port, $mac_onu10) {
+  $unb = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.11.1.1.2.'.$num_opt_port.$mac_onu10, 'i', '0');
+}
+
 ?>

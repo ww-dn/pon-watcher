@@ -72,7 +72,7 @@ CREATE TABLE `onu` (
   `mac` varchar(50) NOT NULL,
   `boxid` int(11) NOT NULL DEFAULT 0,
   `roz` int(11) DEFAULT NULL,
-  `last_laser_lvl` varchar(10) DEFAULT NULL,
+  `last_laser_lvl` varchar(10) NOT NULL DEFAULT '0',
   `lat` varchar(20) DEFAULT NULL,
   `lon` varchar(20) DEFAULT NULL,
   `description` varchar(250) DEFAULT NULL

@@ -1,3 +1,6 @@
+v0.5.1-beta
+  - Реализована отвязка ОНУ от ОЛТ
+  - у кого установлена система, рекомендуется внести изменение в БД (для новых установок в дампе БД уже исправлено): ALTER TABLE `onu` CHANGE `last_laser_lvl` `last_laser_lvl` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0';
 v0.4.1-beta
   - Реализовано сохранение конфигурации ОЛТа
 

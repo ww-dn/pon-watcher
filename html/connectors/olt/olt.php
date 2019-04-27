@@ -22,6 +22,7 @@ if (isset($_GET['p']) AND $_GET['p'] == '21') {
           <th>MAC</th>
           <th>№ муфты</th>
           <th>Уровень</th>
+          <th>Действия</th>
         </tr>
       </thead>
       <tbody>
@@ -35,11 +36,30 @@ if (isset($_GET['p']) AND $_GET['p'] == '21') {
       echo "<td><a href='/?p=22&oltid=".$_GET['oltid']."&onuid=".$row_onu['uidonu']."'>".$row_onu['mac']."</a></td>";
       echo "<td>".$row_onu['num_box']."</td>";
       echo "<td>".$row_onu['last_laser_lvl']."</td>";
+      echo "<td><a href='javascript:void(0);' uk-icon='icon: move' uk-tooltip='Отвязать ONU' onclick=\"unbind('".$_GET['oltid']."', '".$row_onu['uidonu']."')\"></a></td>";
       echo "</tr>";
     }
     echo "</tbody>";
     echo "</table>";
     echo "</div>";
+    ?>
+    <script>
+    function unbind(oltid, uidonu) {
+    $.ajax
+    ({
+      type: "POST",
+      url: "/connectors/olt/olts_conf.php",
+      data: {"unbindonu":'1',"oltid":oltid,"uidonu":uidonu},
+      success: function(html) {
+        toastr["success"]("ONU удалена");
+      },
+      error: function(html) {
+        toastr["error"]("Произошла ошибка при удалении ONU");
+      }
+    });
+    }
+    </script>
+    <?php
     }
     else {
       echo "Нет данных.";
