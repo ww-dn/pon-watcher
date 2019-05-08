@@ -70,4 +70,45 @@ function bdcom_unbind_onu($oltip, $snmppas, $num_opt_port, $mac_onu10) {
   $unb = snmpset($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.11.1.1.2.'.$num_opt_port.$mac_onu10, 'i', '0');
 }
 
+function bdcom_olt_uptime($oltip, $snmppas) {
+  $uptime = snmpget($oltip, $snmppas, '.1.3.6.1.2.1.1.9.1.4.1');
+  $uptime = explode('Timeticks: ', $uptime);
+  $uptime = end($uptime);
+  return $uptime;
+}
+
+function bdcom_olt_temp($oltip, $snmppas) {
+  $temp = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.181.1.1.7.1');
+  $temp = explode('INTEGER: ', $temp);
+  $temp = end($temp);
+  return $temp;
+}
+
+function bdcom_olt_cpu5m ($oltip, $snmppas) {
+  $cpu5m = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.109.1.1.1.1.5.1');
+  $cpu5m = explode('Gauge32: ', $cpu5m);
+  $cpu5m = end($cpu5m);
+  return $cpu5m;
+}
+
+function bdcom_olt_cpu1m ($oltip, $snmppas) {
+  $cpu1m = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.109.1.1.1.1.4.1');
+  $cpu1m = explode('Gauge32: ', $cpu1m);
+  $cpu1m = end($cpu1m);
+  return $cpu1m;
+}
+
+function bdcom_olt_cpu5s ($oltip, $snmppas) {
+  $cpu5s = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.109.1.1.1.1.3.1');
+  $cpu5s = explode('Gauge32: ', $cpu5s);
+  $cpu5s = end($cpu5s);
+  return $cpu5s;
+}
+
+function bdcom_olt_sysinfo ($oltip, $snmppas) {
+  $sysinfo = snmpget($oltip, $snmppas, '.1.3.6.1.2.1.1.1.0');
+  $sysinfo = explode('STRING: ', $sysinfo);
+  $sysinfo = end($sysinfo);
+  return $sysinfo;
+}
 ?>

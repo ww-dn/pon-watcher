@@ -3,8 +3,8 @@ if (isset($_GET['p']) AND $_GET['p'] == '11') {
 $query = new dbmysql();
 $select_olts = $query->result("SELECT * FROM olts");
 $num_rows = $query->fetch_row($select_olts);
-echo "<div class='uk-padding'>";
-echo "<button class='uk-button uk-button-primary' type='button' uk-toggle='target: #modalAdd'>Добавить OLT</button>";
+//echo "<div class='uk-padding'>";
+echo "<button class='uk-button uk-button-primary uk-margin' type='button' uk-toggle='target: #modalAdd'>Добавить OLT</button>";
 if ($num_rows > "0") {
     $row=Array();
     ?>
@@ -26,7 +26,7 @@ if ($num_rows > "0") {
         echo "<td>".long2ip($row['ip'])."</td>";
         echo "<td>".$row['name']."</td>";
         echo "<td>".$row['location']."</td>";
-        echo "<td><a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"saveconf('".$row['id']."')\" uk-icon='icon: cloud-upload' uk-tooltip='Сохранить'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openreboot('".$row['id']."')\" uk-icon='icon: refresh' uk-tooltip='Reboot'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
+        echo "<td><a href='javascript:void(0);' onclick=\"openinfo('".$row['id']."')\" uk-icon='icon: info' uk-tooltip='Информация'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openedit('".$row['id']."')\" uk-icon='icon: cog' uk-tooltip='Редактировать'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"saveconf('".$row['id']."')\" uk-icon='icon: cloud-upload' uk-tooltip='Сохранить'></a>&nbsp; &nbsp;<a href='javascript:void(0);' onclick=\"openreboot('".$row['id']."')\" uk-icon='icon: refresh' uk-tooltip='Reboot'></a>&nbsp; &nbsp;<a href='/connectors/olt/olts_conf.php?del&id=".$row['id']."' uk-icon='icon: trash' class='uk-text-danger' uk-tooltip='Удалить'></a></td>";
         echo "</tr>";
     }
 ?>
@@ -80,6 +80,10 @@ if ($num_rows > "0") {
 
 
 <!-- Modal edit-->
+<div id="oltInfo" uk-modal>
+
+</div>
+
 <div id="oltEdit" uk-modal>
 
 </div>
@@ -89,6 +93,25 @@ if ($num_rows > "0") {
 </div>
 
 <script>
+function openinfo(oltid) {
+    var boxid = boxid,
+        modal = UIkit.modal('#oltInfo', {
+          escClose: false,
+          bgClose: false
+        });
+    modal.show();
+    $.ajax
+    ({
+      type: "GET",
+      url: "/connectors/olt/olt_info.php",
+      data: {"info":'1',"id":oltid},
+      success: function(html) {
+        $('#oltInfo').empty();
+        $("#oltInfo").html(html);
+      }
+    });
+  }
+
 function openedit(oltid) {
     var boxid = boxid,
         modal = UIkit.modal('#oltEdit', {
