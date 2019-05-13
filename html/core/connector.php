@@ -21,5 +21,8 @@ else if ($_GET['p'] == '32') {
 else if ($_GET['p'] == '41') {
     include(CONNECTORS_PATH . '/backup/backup.php');
 }
+else if ($_GET['p'] == '51') {
+    include(CONNECTORS_PATH . '/calc/calc.php');
+}
 
 ?>
