@@ -69,9 +69,21 @@ if (isset($_GET['p']) AND $_GET['p'] == '32') {
 </div>
 <!-- End Modal -->
 </div>
+
+<?php
+if ( MAPS == 'yandex' ) {
+?>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=<?=MAPS_YA_API_KEY?>&lang=ru_RU" type="text/javascript">
 </script>
-
+<?php
+}
+elseif ( MAPS == 'osm' ) {
+?>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<?php
+}
+?>
 <script>
 $(document).ready(function(){
     $('.openEdit').on('click',function(){
