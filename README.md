@@ -16,6 +16,8 @@
 
 * Отредактировать файл config.core.php
 
+MAPS - тип используемой карты ( osm, yandex )
+
 MAPS_YA_API_KEY - Вписать свой api ключ yandex карт
 
 MAPS_DEF_LAT, MAPS_DEF_LON - вписать долготу, широту по умолчания
