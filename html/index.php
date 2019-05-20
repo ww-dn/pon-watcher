@@ -7,5 +7,5 @@
 
 
 
-@include(dirname(__FILE__) . '/assets/foot.html');
+@include(dirname(__FILE__) . '/assets/foot.php');
 ?>

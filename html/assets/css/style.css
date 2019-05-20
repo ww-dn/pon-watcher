@@ -11,3 +11,13 @@ body {
 .uk-navbar-container {
   background: #e6e6e6 !important;
 }
+
+footer { 
+  height: 30px;
+  margin-top: -40px;
+ }
+
+.content {
+  min-height: 96%;
+  margin-bottom: 40px;
+}
