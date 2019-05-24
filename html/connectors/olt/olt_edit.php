@@ -17,6 +17,7 @@ if (isset($_GET['edit'])) {
     <div class="uk-modal-body">
         <form id="editolt" method="POST" action="/connectors/olt/olts_conf.php">
         <input type="hidden" name="edit">
+        <input type="hidden" name="oltid" value="<?=$_GET['id']?>">
         <div class="uk-margin">
           <input type="text" class="uk-input uk-form-width-medium" placeholder="Имя" id="nameOlt" name="nameolt" value="<?=$row_olt_edit['name']?>">
         </div>

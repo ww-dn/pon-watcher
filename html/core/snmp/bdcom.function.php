@@ -26,7 +26,7 @@ function bdcom_get_onu_port_cooper($oltip, $snmppas, $uidonu) {
   return $port_onu;
 }
 function bdcom_get_laser_level($oltip, $snmppas, $uidonu) {
-  $laser_level = snmp2_get($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.108.1.3.'.$uidonu);
+  $laser_level = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.101.108.1.3.'.$uidonu);
   $laser_level = explode('INTEGER: ', $laser_level);
   $laser_level = end($laser_level);
   $laser_level = (int) $laser_level;
@@ -81,6 +81,7 @@ function bdcom_olt_temp($oltip, $snmppas) {
   $temp = snmpget($oltip, $snmppas, '.1.3.6.1.4.1.3320.9.181.1.1.7.1');
   $temp = explode('INTEGER: ', $temp);
   $temp = end($temp);
+  $temp = $temp." &deg;C";
   return $temp;
 }
 
@@ -103,6 +104,11 @@ function bdcom_olt_cpu5s ($oltip, $snmppas) {
   $cpu5s = explode('Gauge32: ', $cpu5s);
   $cpu5s = end($cpu5s);
   return $cpu5s;
+}
+
+function bdcom_olt_cpu ($oltip, $snmppas) {
+  $cpu = "за 5 сек.: " . bdcom_olt_cpu5s($oltip, $snmppas). "%, за 1 мин.: " . bdcom_olt_cpu1m($oltip, $snmppas) . "%, за 5 мин.: " . bdcom_olt_cpu5m($oltip, $snmppas) . "%";
+  return $cpu;
 }
 
 function bdcom_olt_sysinfo ($oltip, $snmppas) {

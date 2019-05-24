@@ -55,7 +55,7 @@ if ($num_rows > "0") {
         </div>
         <div class="uk-margin">
           <select id="vendor" class="uk-select uk-form-width-small" name="vendorolt">
-            <option selected value="bdcom">bdcom</option>
+            <option value="bdcom">bdcom</option>
           </select>
         </div>
         <div class="uk-margin">
@@ -187,7 +187,7 @@ else if (isset($_POST['edit'])) {
   @include(dirname(dirname(dirname(__FILE__))) . '/config.core.php');
   @include(dirname(dirname(dirname(__FILE__))) . '/core/mysql.class.php');
   $query_add = new dbmysql();
-  $query_add->result("UPDATE `olts` SET  `ip` = INET_ATON('".$_POST['ipolt']."'), `name` = '".$_POST['nameolt']."', `location` = '".$_POST['locationolt']."', `vendor` = '".$_POST['vendorolt']."', `snmppas` = '".$_POST['snmppassolt']."'");
+  $query_add->result("UPDATE `olts` SET  `ip` = INET_ATON('".$_POST['ipolt']."'), `name` = '".$_POST['nameolt']."', `location` = '".$_POST['locationolt']."', `vendor` = '".$_POST['vendorolt']."', `snmppas` = '".$_POST['snmppassolt']."' WHERE `id` = " . $_POST['oltid'] . "");
   header("Location: /?p=11");
 }
 

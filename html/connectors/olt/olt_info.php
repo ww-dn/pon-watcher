@@ -11,9 +11,7 @@ if (isset($_GET['info'])) {
   include_once($_SERVER['DOCUMENT_ROOT'] . "/core/snmp/" . $row_olt_info['vendor'] . ".function.php");
   $olt_uptime = $row_olt_info['vendor']."_olt_uptime";
   $olt_temp = $row_olt_info['vendor']."_olt_temp";
-  $olt_cpu5s = $row_olt_info['vendor']."_olt_cpu5s";
-  $olt_cpu1m = $row_olt_info['vendor']."_olt_cpu1m";
-  $olt_cpu5m = $row_olt_info['vendor']."_olt_cpu5m";
+  $olt_cpu = $row_olt_info['vendor']."_olt_cpu";
   $olt_sysinfo = $row_olt_info['vendor']."_olt_sysinfo";
 ?>
 <div class="uk-modal-dialog">
@@ -27,9 +25,9 @@ if (isset($_GET['info'])) {
       <dt>Uptime:</dt>
       <dd><?=$olt_uptime(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?></dd>
       <dt>Температура платы:</dt>
-      <dd><?=$olt_temp(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?> &deg;C</dd>
+      <dd><?=$olt_temp(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?></dd>
       <dt>Загрузка CPU:</dt>
-      <dd>за 5 сек.: <?=$olt_cpu5s(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?>%, за 1 мин.: <?=$olt_cpu1m(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?>%, за 5 мин.: <?=$olt_cpu5m(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?>%</dd>
+      <dd><?=$olt_cpu(long2ip($row_olt_info['ip']), $row_olt_info['snmppas'])?></dd>
     </div>
     </div>
     <div class="uk-modal-footer">
