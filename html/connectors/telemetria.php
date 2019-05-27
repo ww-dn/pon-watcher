@@ -31,7 +31,7 @@ if (count($ids_onu) > 0) {
     $id_onu = end($id_onu); // Узнаем id интерфейса на OLT-e
     $iface = $get_iface($olt_ip, $row_olt['snmppas'], $id_onu); // Узнаем интерфейс онушки на ОЛТе
     $mac = $get_mac_onu($olt_ip, $row_olt['snmppas'], $id_onu); // Узнаем MAC
-    $select_uidonu = $q_find_onu->result("SELECT `id`, `uidonu` FROM `onu` WHERE `uidonu` = '".$id_onu."'");
+    $select_uidonu = $q_find_onu->result("SELECT `id`, `uidonu` FROM `onu` WHERE `id_olt` = '".$row_olt['id']."' AND `uidonu` = '".$id_onu."'");
     $num_row = $q_find_onu->fetch_row($select_uidonu);
     //print_r($num_row);
     if ($num_row == '0') {
