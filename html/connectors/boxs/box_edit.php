@@ -27,7 +27,7 @@
   <h5 class="uk-modal-title">Редактировать бокс № <?=$row_box_edit['num_box']?></h5>  
 </div>
 <div class="uk-modal-body">
-  <form id="editbox" method="POST" action="/connectors/boxs/conf_boxs.php">
+  <form id="editbox" method="POST" action="/connectors/boxs/boxs_conf.php">
     <input type="hidden" name="edit">
     <input type="hidden" name="idbox" value="<?=$_GET['id']?>">
     <div class="uk-margin">
