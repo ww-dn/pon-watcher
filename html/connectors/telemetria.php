@@ -42,7 +42,11 @@ if (count($ids_onu) > 0) {
 }
 }
 }
+  if (isset($_GET['ret']) AND $_GET['ret'] == 1) {
+    header("Location: /");
+  }
 }
+
 if (isset($_GET['f']) AND $_GET['f'] == 'ping') {
   $query = new dbmysql();
   $q_onu_select = new dbmysql();
@@ -69,7 +73,11 @@ if (isset($_GET['f']) AND $_GET['f'] == 'ping') {
     }
   }
   }
+  if (isset($_GET['ret']) AND $_GET['ret'] == 1) {
+    header("Location: /");
+  }
 }
+
 if (isset($_POST['f']) AND $_POST['f'] == 'saveonupoint') {
     $savepoint = new dbmysql();
     $savetodb = $savepoint->result("UPDATE onu SET lat = '".$_POST['lat']."', lon = '".$_POST['lon']."' WHERE id_olt = '".$_POST['oltid']."' AND uidonu = '".$_POST['onuid']."'");

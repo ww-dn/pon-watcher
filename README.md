@@ -1,5 +1,5 @@
 # pon-watcher
-**v0.6.4-beta**
+**v0.6.5-beta**
 
 **Требования**
 * php7(на меньших версиях не проверялось), mysql, nginx(apache)
